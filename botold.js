@@ -24,82 +24,24 @@ async function sleep(ms) {
 }  
 
 bot.on('voiceStateUpdate', async (oldState, newState) => {
-    const crown = '[♛]';
+
     var movedLog = await newState.guild.fetchAuditLogs({type: 'MEMBER_MOVE', user: newState.user}).then(audit => audit.entries.first());
     var discLog = await newState.guild.fetchAuditLogs({type: 'MEMBER_DISCONNECT', user: newState.user}).then(audit => audit.entries.first());
 
     if (newState.channel != null) {
-        var perms = newState.channel.permissionOverwrites.find(x => x.type === "member");
         if (newState.channel.parent === newState.guild.channels.cache.find(c => c.name == "Temp ✪ ════════════════" && c.type == "category")) {
-            await newState.member.roles.add(newState.guild.roles.cache.find(role => role.name === "vc"));  
-            try {
-                var nick = '';
-                if(perms.id === newState.member.id) {
-                    if (newState.member.nickname) {
-                        nick = newState.member.nickname;
-                    } else {
-                        nick = newState.member.displayName;
-                    }
-
-                    if (!nick.includes(crown)) {
-                        await newState.member.setNickname(crown + nick);  
-                        //await newState.channel.cache.update();     
-                    }          
-                }
-            } catch (error) {
-                
-            }  
-        }                                                    
+            await newState.member.roles.add(newState.guild.roles.cache.find(role => role.name === "vc"));
+        }
     }
 
     if(newState.channel === null) {
-        if (oldState.channel === null) {
-            try {
-                await oldState.member.setNickname(oldState.member.nickname.replace(crown, ''));
-                await oldState.member.roles.remove(oldState.guild.roles.cache.find(role => role.name === "vc"));
-            } catch (error) {
-                
-            }
-            
-        } else {
-            await oldState.member.roles.remove(oldState.guild.roles.cache.find(role => role.name === "vc"));
-            var perms = oldState.channel.permissionOverwrites.find(x => x.type === "member");
-            if (oldState.channel != null) {
-                try {
-                    if(perms.id === oldState.member.id) {
-                        await oldState.member.setNickname(oldState.member.nickname.replace(crown, ''));                  
-                    }
-                } catch (error) {
-                    
-                }            
-            } 
-        }
-                
+        await newState.member.roles.remove(newState.guild.roles.cache.find(role => role.name === "vc"));
     }
 
     if (oldState.channel != null) {
-        var perms = oldState.channel.permissionOverwrites.find(x => x.type === "member");
-        try {
-               
-            if(perms.id === oldState.member.id) {
-                var perms2 = newState.channel.permissionOverwrites.find(x => x.type === "member");
-                if (perms2) {
-                    if (perms2.id != newState.member.id || !perms2) {
-                        await oldState.member.setNickname(oldState.member.nickname.replace(crown, ''));  
-                    }
-                } else {
-                    await oldState.member.setNickname(oldState.member.nickname.replace(crown, ''));
-                }
-                                   
-            } 
-           
-        } catch (error) {
-            
-        }
-        
         if (oldState.channel.parent === oldState.guild.channels.cache.find(c => c.name == "Temp ✪ ════════════════" && c.type == "category")) {
-            if(oldState.channel.members.size === 0) {               
-                await oldState.channel.delete();           
+            if(oldState.channel.members.size === 0) {
+                await oldState.channel.delete();
             }           
         }
     }
@@ -212,9 +154,7 @@ bot.on('message', async msg => {
                             allow: ['MANAGE_CHANNELS']
                         },
                       ], parent: category.id})
-                      .then(vc => {
-                            kmem.voice.setChannel(vc);                                                     
-                    });
+                      .then(vc => {msg.member.voice.setChannel(vc)});
                 }
                     catch(err) {
                 }
@@ -311,13 +251,13 @@ bot.on('message', async msg => {
             }
 
             if(split[0] === ".setbitrate") {
-                const name = split[1];
+                const id = split[1];
                 var bitrate = Number(split[2]);
-                vc = msg.guild.channels.cache.find(vc => vc.name === name);
+                vc = msg.guild.channels.cache.find(vc => vc.id === id);
                 await vc.setBitrate(bitrate);
-                msg.reply(new Discord.MessageEmbed().setColor("#00e584").setDescription('Bitrate of ' + name + ' has been updated to ' + bitrate + 'bps'));
+                msg.reply(new Discord.MessageEmbed().setColor("#00e584").setDescription('Bitrate of ' + vc.name + ' has been updated to ' + bitrate + 'bps'));
             }
-
+            
             if(split[0] === ".rp") {
                 var rolename = text.substring(split[0].length + 1);
                 var role;
