@@ -252,9 +252,10 @@ bot.on('message', async msg => {
                         var daydiff = timediff/(1000*60*60*24);
 
                         if(daydiff >= 14) {
-                            await msg.client.users.cache.get(unvfMembers[i].id).send("Hello! We're glad you decided to give Noir a try,"+
+                            await msg.client.users.cache.get(unvfMembers[i].id).send("Hello! We're glad you decided to give Null a try,"+
                                     " though it seems you were unable to verify within 14 days. \n"+
                                     "We like to ensure that all of our members are active and partaking in the community, so that what you see, is what you get.\n\n"+
+                                    //we can insert a discord invite in here                                                
                             await kmem.kick('unverified for 14 days');
                             yeeted += 1;
                         }                       
