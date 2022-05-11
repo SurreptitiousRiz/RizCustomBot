@@ -222,7 +222,7 @@ bot.on('message', async msg => {
         }
     }
 
-    if(msg.channel.name=== 'core' || 'casshole') {
+    if(msg.channel.name=== 'core') {
         if(text.substring(0,1) === '.') {
             var split = text.split(" ");
             if(split[0] === '.setimagecd') {
@@ -252,11 +252,9 @@ bot.on('message', async msg => {
                         var daydiff = timediff/(1000*60*60*24);
 
                         if(daydiff >= 14) {
-                            await msg.client.users.cache.get(unvfMembers[i].id).send("Hello! We're glad you decided to give Noir 18+ a try,"+
+                            await msg.client.users.cache.get(unvfMembers[i].id).send("Hello! We're glad you decided to give Noir a try,"+
                                     " though it seems you were unable to verify within 14 days. \n"+
                                     "We like to ensure that all of our members are active and partaking in the community, so that what you see, is what you get.\n\n"+
-
-                                    "We hope you'll come back when you're ready to verify that you are over 18!\n\nhttps://discord.gg/noir18" );
                             await kmem.kick('unverified for 14 days');
                             yeeted += 1;
                         }                       
@@ -294,7 +292,7 @@ bot.on('message', async msg => {
     }
 
 
-    if(msg.channel.name === 'cmd' || 'op' || 'core' || 'casshole') {
+    if(msg.channel.name === 'cmd' || 'core') {
     	if(text.substring(0,1) === '.') {
     		var split = text.split(" ");
 
